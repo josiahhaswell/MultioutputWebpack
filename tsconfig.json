@@ -1,7 +1,7 @@
 {
   "compileOnSave": true,  
   "compilerOptions": {
-    //"incremental": true,
+    "incremental": true,
     "module": "esnext",
     "skipLibCheck": true,
     "removeComments": true,
@@ -16,7 +16,6 @@
       "webworker"
     ],
     "moduleResolution": "node",
-    "allowJs": true,
     "baseUrl": "src"
   },
   "include": [

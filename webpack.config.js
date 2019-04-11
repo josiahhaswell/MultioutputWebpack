@@ -4,10 +4,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 const project = require('./aurelia_project/aurelia.json');
-const { AureliaPlugin, ModuleDependenciesPlugin } = require('aurelia-webpack-plugin');
-const { ProvidePlugin } = require('webpack');
-const { BabelMultiTargetPlugin } = require('webpack-babel-multi-target-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const {AureliaPlugin, ModuleDependenciesPlugin} = require('aurelia-webpack-plugin');
+const {ProvidePlugin} = require('webpack');
+const {BabelMultiTargetPlugin} = require('webpack-babel-multi-target-plugin');
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 //const PurgecssPlugin = require('purgecss-webpack-plugin');
 //const { GenerateSW } = require("workbox-webpack-plugin");
 //See https://github.com/GoogleChromeLabs/preload-webpack-plugin/issues/79 for problems.
@@ -15,7 +15,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 // config helpers:
 const ensureArray = (config) => config && (Array.isArray(config) ? config : [config]) || [];
-const when = (condition, config, negativeConfig) =>  condition ? ensureArray(config) : ensureArray(negativeConfig);
+const when = (condition, config, negativeConfig) => condition ? ensureArray(config) : ensureArray(negativeConfig);
 
 // primary config:
 const title = 'Aurelia Navigation Skeleton';
@@ -25,24 +25,26 @@ const nodeModulesDir = path.resolve(__dirname, 'node_modules');
 const baseUrl = '/';
 
 const cssRules = [
-  { loader: 'css-loader' },
+  {loader: 'css-loader'},
   {
     loader: 'postcss-loader',
-    options: { plugins: () => [
-      require('autoprefixer')({ browsers: ['last 2 versions'] }),
-      require('cssnano')()
-    ] }
+    options: {
+      plugins: () => [
+        require('autoprefixer')({browsers: ['last 2 versions']}),
+        require('cssnano')()
+      ]
+    }
   }
 ];
 
-module.exports = ({ production, server, extractCss, coverage, analyze, karma } = {}) => ({
+module.exports = ({production, server, extractCss, coverage, analyze, karma} = {}) => ({
   resolve: {
     extensions: ['.ts', '.js'],
     modules: [srcDir, 'node_modules'],
     // Enforce single aurelia-binding, to avoid v1/v2 duplication due to
     // out-of-date dependencies on 3rd party aurelia plugins
-    alias: { 'aurelia-binding': path.resolve(__dirname, 'node_modules/aurelia-binding') },
-    mainFields: [ 'es2015', 'module', 'main' ],
+    alias: {'aurelia-binding': path.resolve(__dirname, 'node_modules/aurelia-binding')},
+    mainFields: ['es2015', 'module', 'main'],
   },
   entry: {
     app: ['aurelia-bootstrapper']
@@ -151,7 +153,7 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
       }
     }
   },
-  performance: { hints: 'warning' },
+  performance: {hints: 'warning'},
   devServer: {
     contentBase: outDir,
     // serve index.html for all 404 (required for push-state)
@@ -164,39 +166,51 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
       // only when the issuer is a .js/.ts file, so the loaders are not applied inside html templates
       {
         test: /\.css$/i,
-        issuer: [{ not: [{ test: /\.html$/i }] }],
+        issuer: [{not: [{test: /\.html$/i}]}],
         use: extractCss ? [{
           loader: MiniCssExtractPlugin.loader
         },
-        'css-loader'
+          'css-loader'
         ] : ['style-loader', ...cssRules]
       },
       {
         test: /\.css$/i,
-        issuer: [{ test: /\.html$/i }],
+        issuer: [{test: /\.html$/i}],
         // CSS required in templates cannot be extracted safely
         // because Aurelia would try to require it again in runtime
         use: cssRules
       },
-      { test: /\.html$/i, loader: 'html-loader' },
+      {test: /\.html$/i, loader: 'html-loader'},
       {
-        test: /\.(ts|js)x?$/, loader: 'babel-loader' },           
-      /* { test: /\.ts$/, use: { loader: [ BabelMultiTargetPlugin.loader(), "ts-loader" ], options: { presets: ['@babel/preset-env'] } } },*/
+        test: /\.(js)x?$/, loader: 'babel-loader'
+      },
+      {
+        test: /\.ts$/,
+        use: {loader: "ts-loader"}
+      },
       // embed small images and fonts as Data Urls and larger ones as files:
-      { test: /\.(png|gif|jpg|cur)$/i, loader: 'url-loader', options: { limit: 8192 } },
-      { test: /\.woff2(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'url-loader', options: { limit: 10000, mimetype: 'application/font-woff2' } },
-      { test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'url-loader', options: { limit: 10000, mimetype: 'application/font-woff' } },
+      {test: /\.(png|gif|jpg|cur)$/i, loader: 'url-loader', options: {limit: 8192}},
+      {
+        test: /\.woff2(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+        loader: 'url-loader',
+        options: {limit: 10000, mimetype: 'application/font-woff2'}
+      },
+      {
+        test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+        loader: 'url-loader',
+        options: {limit: 10000, mimetype: 'application/font-woff'}
+      },
       // load these fonts normally, as files:
-      { test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'file-loader' },
+      {test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'file-loader'},
       ...when(coverage, {
         test: /\.[jt]s$/i, loader: 'istanbul-instrumenter-loader',
         include: srcDir, exclude: [/\.(spec|test)\.[jt]s$/i],
-        enforce: 'post', options: { esModules: true },
+        enforce: 'post', options: {esModules: true},
       })
     ]
   },
-  plugins: [    
-    ...when(!karma, new DuplicatePackageCheckerPlugin()),    
+  plugins: [
+    ...when(!karma, new DuplicatePackageCheckerPlugin()),
     new AureliaPlugin(),
     new ProvidePlugin({
       $: 'jquery',
@@ -235,7 +249,7 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
       chunkFilename: production ? 'css/[name].[contenthash].chunk.css' : 'css/[name].[hash].chunk.css'
     })),
     ...when(production || server, new CopyWebpackPlugin([
-      { from: 'static', to: outDir, ignore: ['.*'] }])), // ignore dot (hidden) files
+      {from: 'static', to: outDir, ignore: ['.*']}])), // ignore dot (hidden) files
     ...when(analyze, new BundleAnalyzerPlugin())
   ]
 });

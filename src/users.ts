@@ -5,8 +5,13 @@ import {HttpClient} from 'aurelia-fetch-client';
 export class Users {    
   public heading: string = 'Github Users';
   public users: any[] = [];
+
+  // static inject = [HttpClient];
+  // private http : HttpClient;
+
   
-  constructor(private http: HttpClient) {    
+  constructor(private http: HttpClient) {
+    // this.http = http;
     if (http == null) {
       throw new Error('http was null');
     }
@@ -18,6 +23,7 @@ export class Users {
   }
 
   async activate(): Promise<void> {
+
     const response = await this.http.fetch('users');
     this.users = await response.json();
   }
