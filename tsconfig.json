@@ -1,0 +1,33 @@
+{
+  "compileOnSave": true,  
+  "compilerOptions": {
+    //"incremental": true,
+    "module": "esnext",
+    "skipLibCheck": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "strictNullChecks":true,
+    "target": "es5",
+    "lib": [
+      "es2018",
+      "dom",
+      "webworker"
+    ],
+    "moduleResolution": "node",
+    "allowJs": true,
+    "baseUrl": "src"
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./test/**/*.ts",
+    "./types/**/*.d.ts"
+  ],
+  "exclude": [
+    "./test/e2e/**/*.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}
